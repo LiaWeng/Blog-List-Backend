@@ -28,13 +28,14 @@ loginRouter.post('/', async(request, response) => {
   }
 
   const token = jwt.sign(forToken, process.env.SECRET)
-  await console.log(token)
 
   response
     .status(200)
     .json({
       token,
-      username: user.username
+      username: user.username,
+      name: user.name,
+      id: user._id
     })
 })
 
