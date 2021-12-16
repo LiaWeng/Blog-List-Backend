@@ -2,6 +2,7 @@ const blogsRouter = require('express').Router()
 const Blog = require('../models/blog_model')
 const User = require('../models/user_model')
 const middleware = require('../utils/middleware')
+const mongoose = require('mongoose')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -9,12 +10,6 @@ blogsRouter.get('/', async (request, response) => {
     .populate('user', { username: 1, name: 1 })
 
   response.json(blogs)
-})
-
-blogsRouter.get('/:id', async (request, response) => {
-  console.log(request.params.id)
-  const blog = await Blog.findById(request.params.id)
-  response.json(blog)
 })
 
 blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
@@ -36,6 +31,12 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   response.status(201).json(savedBlog)
 })
 
+blogsRouter.get('/:id', async (request, response) => {
+  console.log(request.params.id)
+  const blog = await Blog.findById(request.params.id)
+  response.json(blog)
+})
+
 blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
   const blog = await Blog.findById(request.params.id)
 
@@ -50,7 +51,8 @@ blogsRouter.put('/:id', async (request, response) => {
     title: request.body.title,
     author: request.body.author,
     url: request.body.url,
-    likes: request.body.likes
+    likes: request.body.likes,
+    user: mongoose.Types.ObjectId(request.body.user)
   }
 
   const result = await Blog.findByIdAndUpdate(request.params.id, updatedBlog, { new: true })
