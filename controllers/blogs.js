@@ -43,6 +43,8 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
   if (blog.user.toString() === request.user._id.toString()) {
     await Blog.findByIdAndRemove(request.params.id)
     response.status(204).end()
+  } else {
+    response.status(401).end()
   }
 })
 
