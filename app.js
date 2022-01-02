@@ -23,6 +23,12 @@ app.use('/api/comments', commentsRouter)
 app.use('/api/testing', testingRouter)
 
 mongoose.connect(config.MONGODB_URI)
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch(error => {
+    console.log('error connecting to MongoDB', error.message)
+  })
 
 app.use(middleware.errorHandler)
 
