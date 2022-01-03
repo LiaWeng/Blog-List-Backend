@@ -1,6 +1,7 @@
 const express = require('express')
 require('express-async-errors')
 const app = express()
+const path = require('path')
 const cors = require('cors')
 const mongoose = require('mongoose')
 const config = require('./utils/config')
@@ -29,6 +30,9 @@ app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/comments', commentsRouter)
 app.use('/api/testing', testingRouter)
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'))
+})
 
 app.use(middleware.errorHandler)
 
